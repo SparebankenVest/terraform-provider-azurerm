@@ -136,7 +136,7 @@ func dataSourceApiManagementService() *schema.Resource {
 							Type:     schema.TypeList,
 							Computed: true,
 							Elem: &schema.Resource{
-								Schema: apiManagementDataSourceHostnameProxySchema(),
+								Schema: apiManagementDataSourceHostnameSchema(),
 							},
 						},
 						"scm": {
@@ -237,12 +237,12 @@ func flattenDataSourceApiManagementHostnameConfigurations(input *[]apimanagement
 			output["key_vault_id"] = *config.KeyVaultID
 		}
 
+		if config.DefaultSslBinding != nil {
+			output["default_ssl_binding"] = *config.DefaultSslBinding
+		}
+
 		switch strings.ToLower(string(config.Type)) {
 		case strings.ToLower(string(apimanagement.Proxy)):
-			// only set SSL binding for proxy types
-			if config.DefaultSslBinding != nil {
-				output["default_ssl_binding"] = *config.DefaultSslBinding
-			}
 			proxyResults = append(proxyResults, output)
 
 		case strings.ToLower(string(apimanagement.Management)):
@@ -325,16 +325,10 @@ func apiManagementDataSourceHostnameSchema() map[string]*schema.Schema {
 			Type:     schema.TypeBool,
 			Computed: true,
 		},
+
+		"default_ssl_binding": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
 	}
-}
-
-func apiManagementDataSourceHostnameProxySchema() map[string]*schema.Schema {
-	hostnameSchema := apiManagementDataSourceHostnameSchema()
-
-	hostnameSchema["default_ssl_binding"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Computed: true,
-	}
-
-	return hostnameSchema
 }
