@@ -190,12 +190,7 @@ func resourceArmApiManagementApiCreateUpdate(d *schema.ResourceData, meta interf
 	name := d.Get("name").(string)
 	revision := int32(d.Get("revision").(int))
 
-<<<<<<< HEAD
 	apiId := fmt.Sprintf("%s;rev=%d", name, revision)
-=======
-	//Currently we don't support revisions, so we use 1 as default
-	apiId := fmt.Sprintf("%s;rev=%d", name, 1)
->>>>>>> Cleanup:
 	d.Set("api_id", apiId)
 
 	var properties *apimanagement.APICreateOrUpdateProperties
@@ -333,10 +328,6 @@ func expandApiManagementApiProperties(d *schema.ResourceData) *apimanagement.API
 	path := d.Get("path").(string)
 	serviceUrl := d.Get("service_url").(string)
 	description := d.Get("description").(string)
-<<<<<<< HEAD
-=======
-	soapPassThrough := d.Get("soap_pass_through").(bool)
->>>>>>> Cleanup:
 
 	props := &apimanagement.APICreateOrUpdateProperties{
 		Description:                   &description,
@@ -347,7 +338,6 @@ func expandApiManagementApiProperties(d *schema.ResourceData) *apimanagement.API
 		SubscriptionKeyParameterNames: expandApiManagementApiSubscriptionKeyParamNames(d),
 	}
 
-<<<<<<< HEAD
 	if v, ok := d.GetOk("soap_pass_through"); ok {
 		soapPassThrough := v.(bool)
 
@@ -356,10 +346,6 @@ func expandApiManagementApiProperties(d *schema.ResourceData) *apimanagement.API
 		} else {
 			props.APIType = apimanagement.APIType(apimanagement.SoapToRest)
 		}
-=======
-	if soapPassThrough {
-		props.APIType = apimanagement.APIType(apimanagement.SoapPassThrough)
->>>>>>> Cleanup:
 	}
 
 	return props
